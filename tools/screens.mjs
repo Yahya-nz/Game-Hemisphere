@@ -1,6 +1,8 @@
-// Screenshots of every panel at desktop and phone sizes.
-import { chromium, openGame, solveCurrent } from '../tests/e2e/helpers.mjs'
-const out = process.argv[2]
+// Usage: node tools/screens.mjs [outDir]   (run npm run build first; default outDir: shots/, ignored by git)
+// Screenshots of the title, its panels, and a mixing level in play, its menu and solved, at desktop and phone sizes.
+import path from 'node:path'
+import { chromium, openGame, solveCurrent, root } from '../tests/e2e/helpers.mjs'
+const out = path.resolve(process.argv[2] || path.join(root, 'shots'))
 const browser = await chromium.launch()
 for (const [name, opts] of [['desk', { width: 1440, height: 900 }], ['phone', { width: 390, height: 844, mobile: true }]]) {
   const { page, errors } = await openGame(browser, opts)

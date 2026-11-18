@@ -24,7 +24,7 @@ Layar judulnya dibelah dua kayak wallpaper aslinya. Kiri itu logika, dengan gamb
 
 **Main**
 
-Ketuk ubin buat memutarnya. Cat langsung mengalir lewat jalur yang tersambung, dan contekan campuran warnanya ada di sebelah kanan. Beberapa papan dipotong berbentuk gelombang sinus, lingkaran jangka, atau spiral emas, kayak level spiral di bawah ini.
+Ketuk ubin buat memutarnya. Cat langsung mengalir lewat jalur yang tersambung. Kalau levelnya punya warna campuran, contekan campurannya muncul di sebelah kanan layar laptop. Di HP, aturan campurnya bisa dilihat lewat Menu, lalu Cara main. Beberapa papan dipotong berbentuk gelombang sinus, lingkaran jangka, atau spiral emas, kayak level spiral di bawah ini.
 
 ![Main](screenshot/03-main.png)
 
@@ -48,7 +48,7 @@ Di bab terakhir papannya berbentuk otak utuh, dan dua belahannya cuma bersentuha
 
 **Mimpi**
 
-Teka-teki baru tanpa batas dalam tiga ukuran, plus satu teka-teki harian. Teka-teki harian sama untuk semua orang di tanggal yang sama, dan kalau dimainkan tiap hari hitungan beruntunnya naik.
+Teka-teki baru tanpa batas dalam tiga ukuran, plus satu teka-teki harian. Teka-teki harian sama untuk semua orang di tanggal yang sama, dan kalau diselesaikan tiap hari hitungan beruntunnya naik.
 
 ![Mimpi](screenshot/07-mimpi.png)
 
@@ -116,7 +116,7 @@ Kiri: layar judul. Kanan: bab Dua warna, papannya berbentuk lingkaran jangka.
 │   └── e2e               tes Playwright di ukuran laptop dan HP
 ├── tools
 │   ├── build.mjs         gabungkan src jadi index.html (plus dist/ untuk versi claude.ai)
-│   ├── screens.mjs       screenshot semua panel di laptop dan HP
+│   ├── screens.mjs       screenshot layar judul, panel, dan contoh level (ke shots/)
 │   └── smoke.mjs         cek cepat error dan tampilan di laptop dan HP
 └── screenshot
 ```
@@ -167,10 +167,12 @@ npm run e2e
 
 ## Mengubah isi
 
-- Daftar bab dan level ada di `src/game/levels.js`, bagian `CHAPTERS`. Level tutorial di bab Garis digambar manual di bagian `TUTORIAL`, sisanya dibuat generator dengan seed tetap.
+- Daftar bab dan level ada di `src/game/levels.js`, bagian `CHAPTERS`. Level tutorial bab Garis ada di bagian `TUTORIAL`: lima di antaranya digambar manual, sedangkan level 5 dan semua level di bab lain dibuat generator dengan seed tetap.
 - Ukuran papan mode Mimpi ada di `src/game/levels.js`, bagian `DREAM_SIZES`.
 - Semua teks bahasa Indonesia dan Inggris ada di `src/app/strings.js`.
-- Warna cat ada di `src/game/engine.js`: `RED`, `YELLOW`, dan `BLUE`. Warna campuran didapat dari gabungan ketiganya, dan namanya ada di `COLOR_NAMES`.
+- Kode warna cat yang digambar ada di `src/game/view.js`, bagian `PAINT_HEX`. Tiap warna campuran punya kode warnanya sendiri di situ, jadi mengubah merah nggak otomatis mengubah oranye atau ungu.
+- Nama warnanya (merah sampai lumpur) ada di `src/app/strings.js`, `color1` sampai `color7`.
+- Aturan campurnya ada di `src/game/engine.js`: `RED`, `YELLOW`, dan `BLUE` itu penanda bit (1, 2, 4), dan warna campuran adalah gabungan bitnya, misalnya merah + kuning = 3 = oranye.
 - Rumus bintang ada di `src/game/session.js`, fungsi `starsFor`.
 - Nada tiap warna cat ada di `src/main.js`, bagian `NOTE_FOR`.
 - Setelah mengubah file di `src`, jalankan `npm run build` supaya `index.html` ikut berubah.

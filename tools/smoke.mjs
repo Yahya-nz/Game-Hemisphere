@@ -3,7 +3,7 @@
 // reports console errors / page errors / horizontal overflow, saves screenshots.
 import { createRequire } from 'node:module'
 const require = createRequire(import.meta.url)
-const { chromium } = require('playwright') // preinstalled globally; ESM import can't see NODE_PATH
+const { chromium } = require('playwright') // a devDependency; require() also finds a global install
 import path from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { mkdir } from 'node:fs/promises'
@@ -24,7 +24,8 @@ for (const vp of [
   await ctx.route(/^https?:\/\//, r => r.abort())
   const page = await ctx.newPage()
   const errors = []
-  page.on('console', m => { if (m.type() === 'error') errors.push('console: ' + m.text()) })
+  // the Google Fonts request is aborted on purpose (offline check), so its failed load is not an error
+  page.on('console', m => { if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) errors.push('console: ' + m.text()) })
   page.on('pageerror', e => errors.push('pageerror: ' + (e.stack || e.message)))
   await page.goto(url, { waitUntil: 'load' })
   await page.waitForTimeout(waitMs)
